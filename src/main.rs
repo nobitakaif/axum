@@ -2,11 +2,11 @@ use axum::{
     Json, Router, extract::Path, routing::{get, post}
 };
 use chrono::{Local, Timelike};
-use store::*;
-mod store;
-
-use crate::request_input::UserInput;
 mod request_input;
+use request_input::*;
+mod db;
+use db::store::UserTable;
+
 #[tokio::main]
 async fn main() {
     // build our application with a single route
@@ -15,9 +15,8 @@ async fn main() {
         .route("/user", post(user_input))
         .route("/check/{user_id}",post(check))
         .route("/path/{pathname}", get(path_check))
-        .route("/seedata", get(see_data))
-        .route("/store", get(store_data));
-        
+        .route("/seedata", get(see_data));
+    
     // run our app with hyper, listening globally on port 3000
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
     print!("server is running on port {}",3000);
@@ -42,19 +41,7 @@ async fn user_input(Json(data): Json<UserInput>)-> String{
 }
 
 async fn see_data(Json(data): Json<UserInput>) -> Json<UserInput>{
-   Json(UserInput { email: String::from(data.email), password: data.password, phone_no: data.phone_no })
-}
-
-async fn store_data(Json(data) : Json<UserInput>) -> String{
-   let a = UserTable{
-        username : String::from("nobita"),
-        email  : String::from("nobit"),
-        phone : 96555555,
-        created_at : Local::now().hour()
-   };
-   match a.create_user() {
-    Some(a) => a,
-    None => String::from("") 
-   }
-
+    let s = UserTable::default();
+    
+    Json(UserInput { email: String::from(data.email), password: data.password, phone_no: data.phone_no })
 }

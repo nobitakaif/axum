@@ -8,3 +8,4 @@ axum = "0.8.8"
 chrono = "0.4.43"
 serde = {version = "1.0.228", features = ["derive"]}
 tokio ={version = "1.49.0", features = ["full"]}
+diesel = {version = "2.3.3", features = ["postgres"]}
