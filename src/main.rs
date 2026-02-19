@@ -5,7 +5,7 @@ use chrono::{Local, Timelike};
 mod request_input;
 use request_input::*;
 mod db;
-use db::store::UserTable;
+use db::store::*;
 
 #[tokio::main]
 async fn main() {
@@ -25,6 +25,7 @@ async fn main() {
 }
 
 async fn get_user()->&'static str{
+    
     "home route"
 }
 
@@ -41,7 +42,7 @@ async fn user_input(Json(data): Json<UserInput>)-> String{
 }
 
 async fn see_data(Json(data): Json<UserInput>) -> Json<UserInput>{
-    let s = UserTable::default();
+    let s = Store::default();
     
     Json(UserInput { email: String::from(data.email), password: data.password, phone_no: data.phone_no })
 }

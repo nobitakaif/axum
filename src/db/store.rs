@@ -1,23 +1,17 @@
 
-use std::env::{self, VarError};
-use std::fmt::Error;
 
-use chrono::{Local, DateTime};
 use diesel::{Connection, ConnectionError, PgConnection};
 
 use crate::db::config::Config;
-use crate::request_input::UserInput;
 
-
-
-pub struct UserTable{
-    conn : PgConnection
+pub struct Store{
+    pub conn : PgConnection
 }
 
-impl UserTable {
+impl Store {
     pub fn default() -> Result<Self, ConnectionError> {
         // reading the env var(read about unwrap_or and unwrap_or_else)
-        let config = Config::default();
+        let config = Config::default(); // here we will get env varible
         let connection = PgConnection::establish(&config.db_url)?;
 
         Ok(Self { 
@@ -26,8 +20,3 @@ impl UserTable {
     }
 }
 
-impl UserTable{
-    pub fn signin(&self){
-        
-    }
-}
